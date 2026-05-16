@@ -18,7 +18,22 @@ export default function Portfolio() {
   const skillsRef = useRef(null);
   const [skillsInView, setSkillsInView] = useState(false);
 
-  const fullText = "Full Stack Developer & Software Engineer";
+  const texts = [
+  "Full Stack Developer",
+  "Software Engineer",
+  "Java Developer",
+  "React Developer",
+  "Spring Boot Developer",
+  "Backend Developer",
+  "Frontend Developer",
+  "Problem Solver",
+  "Tech Enthusiast",
+  "DSA Enthusiast",
+  "Cloud Learner",
+  "REST API Developer"
+];
+
+
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -55,7 +70,7 @@ export default function Portfolio() {
           if (entry.isIntersecting && !hasAnimatedStats) {
             setHasAnimatedStats(true);
             animateValue('projects', 0, 3, 2000);
-            animateValue('problems', 0, 200, 2000);
+            animateValue('problems', 0, 260, 2000);
             animateValue('rank', 0, 16, 2000);
             animateValue('efficiency', 0, 20, 2000);
           }
@@ -146,62 +161,62 @@ export default function Portfolio() {
     { 
       name: "Frontend", 
       items: [
-        { name: "React", level: 85 },
-        { name: "JavaScript", level: 80 },
-        { name: "HTML/CSS", level: 90 },
-        { name: "Tailwind CSS", level: 85 },
-        { name: "Bootstrap", level: 75 }
+        { name: "React", level: 65 },
+        { name: "JavaScript", level: 60 },
+        { name: "HTML/CSS", level: 80 },
+        { name: "Tailwind CSS", level: 65 },
+        { name: "Bootstrap", level: 65 }
       ], 
       icon: <Palette /> 
     },
     { 
       name: "Backend", 
       items: [
-        { name: "Spring Boot", level: 85 },
-        { name: "ASP.NET", level: 80 },
-        { name: "REST APIs", level: 85 },
-        { name: "Node.js", level: 70 },
-        { name: "MVC", level: 80 }
+        { name: "Spring Boot", level: 75 },
+        { name: "ASP.NET", level: 70 },
+        { name: "REST APIs", level: 75 },
+        { name: "Node.js", level: 60 },
+        { name: "MVC", level: 70 }
       ], 
       icon: <Code /> 
     },
     { 
       name: "Languages", 
       items: [
-        { name: "Java", level: 90 },
-        { name: "C++", level: 85 },
-        { name: "C", level: 70 },
-        { name: "C#", level: 80 },
-        { name: "Python", level: 60 }
+        { name: "Java", level: 80 },
+        { name: "C++", level: 75 },
+        { name: "C", level: 60 },
+        { name: "C#", level: 70 },
+        { name: "Python", level: 50 }
       ], 
       icon: <Code /> 
     },
     { 
       name: "Databases", 
       items: [
-        { name: "MySQL", level: 95 },
-        { name: "MongoDB", level: 70 },
-        { name: "RDBMS", level: 80 }
+        { name: "MySQL", level: 85 },
+        { name: "MongoDB", level: 60 },
+        { name: "RDBMS", level: 70 }
       ], 
       icon: <Code /> 
     },
     { 
       name: "DevOps & Cloud", 
       items: [
-        { name: "Docker", level: 50 },
-        { name: "Kubernetes", level: 50 },
-        { name: "AWS (EC2, S3)", level: 50 },
-        { name: "Linux", level: 50 }
+        { name: "Docker", level: 40 },
+        { name: "Kubernetes", level: 35 },
+        { name: "AWS (EC2, S3)", level: 40 },
+        { name: "Linux", level: 35 }
       ], 
       icon: <Zap /> 
     },
     { 
       name: "Tools", 
       items: [
-        { name: "Git/GitHub", level: 90 },
-        { name: "VS Code", level: 95 },
-        { name: "Visual Studio", level: 85 },
-        { name: "STS", level: 85 }
+        { name: "Git/GitHub", level: 80 },
+        { name: "VS Code", level: 78 },
+        { name: "Visual Studio", level: 75 },
+        { name: "STS", level: 72 }
       ], 
       icon: <Zap /> 
     }
@@ -244,43 +259,69 @@ export default function Portfolio() {
   ];
 
   const timeline = [  
-    {
-      year: "July 2025",
-      title: "ZoneOut Project",
-      description: "Full-stack turf booking platform with payment integration",
-      type: "project"
-    },  
-    {
-      year: "Feb 2025 - Aug 2025",
-      title: "Diploma in Advanced Computing",
-      description: "Sunbeam Institute, Pune - 70.94%",
-      type: "education"
-    },
-    {
-      year: "feb 2025",
-      title: "AIR 16 in PreCAT",
-      description: "Secured All India Rank 16 among thousands of candidates",
-      type: "achievement"
-    },    
-    {
-      year: "July 2024",
-      title: "B.Tech Completed",
-      description: "Electronics & Communication Engineering - CGPA 7.43",
-      type: "education"
-    },
-    {
-      year: "Oct 2023 - Apr 2024",
-      title: "Vehicle Theft Detection System",
-      description: "IoT-based project with SMS alerts",
-      type: "project"
-    },
-    {
-      year: "May 2023",
-      title: "SCL Mohali Internship",
-      description: "GUI automation - 20% efficiency improvement",
-      type: "internship"
-    }
-  ];
+  {
+    year: "Present",
+    title: "Java Developer at Bajaj",
+    description: "Working on enterprise-level Java applications and backend development",
+    type: "career"
+  },
+
+  {
+    year: "July 2025",
+    title: "ZoneOut Project",
+    description: "Full-stack turf booking platform with payment integration",
+    type: "project"
+  },  
+
+  {
+    year: "Feb 2025 - Aug 2025",
+    title: "Diploma in Advanced Computing",
+    description: "Sunbeam Institute, Pune - 70.94%",
+    type: "education"
+  },
+
+  {
+    year: "Feb 2025",
+    title: "AIR 16 in PreCAT",
+    description: "Secured All India Rank 16 among thousands of candidates",
+    type: "achievement"
+  },    
+
+  {
+    year: "July 2024",
+    title: "B.Tech Completed",
+    description: "Electronics & Communication Engineering - CGPA 7.43",
+    type: "education"
+  },
+
+  {
+    year: "Oct 2023 - Apr 2024",
+    title: "Vehicle Theft Detection System",
+    description: "IoT-based project with SMS alerts",
+    type: "project"
+  },
+
+  {
+    year: "May 2023",
+    title: "SCL Mohali Internship",
+    description: "GUI automation improving efficiency by 20%",
+    type: "internship"
+  },
+
+  {
+    year: "2020",
+    title: "12th CBSE Board - 94.6%",
+    description: "School Topper and Branch Topper in Senior Secondary",
+    type: "education"
+  },
+
+  {
+    year: "2018",
+    title: "10th State(UP) Board - 89.6%",
+    description: "Ranked among Top 3 students in school",
+    type: "education"
+  }
+];
 
   const bgClass = isDarkMode 
     ? "bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white"
@@ -468,7 +509,7 @@ export default function Portfolio() {
             <a href="#projects" className="px-8 py-3 border-2 border-purple-500 rounded-full font-semibold hover:bg-purple-500/20 transition-colors">
               View Projects
             </a>
-            <a href="#" className="px-8 py-3 border-2 border-pink-500 rounded-full font-semibold hover:bg-pink-500/20 transition-colors inline-flex items-center gap-2">
+            <a href=" /portfolio/Resume.pdf" className="px-8 py-3 border-2 border-pink-500 rounded-full font-semibold hover:bg-pink-500/20 transition-colors inline-flex items-center gap-2" target="_blank" rel="noopener noreferrer">
               <Download size={18} /> Resume
             </a>
           </div>
@@ -521,9 +562,10 @@ export default function Portfolio() {
                 <h3 className="text-2xl font-bold">Career Objective</h3>
               </div>
               <p className={`${textClass} leading-relaxed`}>
-                Seeking to join an organization where I can apply my technical knowledge, problem-solving skills, 
-                and passion for learning to contribute to organizational goals. I embrace new technologies and seek 
-                continuous professional growth in challenging roles.
+                Seeking to leverage my experience as a Java Developer at Bajaj to build scalable, 
+                high-performance applications and contribute to impactful business solutions. Passionate about backend 
+                development, problem-solving, and continuous learning, I aim to grow professionally while working with
+                modern technologies and collaborative teams in challenging environments.
               </p>
             </div>
 
@@ -563,21 +605,30 @@ export default function Portfolio() {
                     <h3 className="text-xl font-bold mb-2">{item.title}</h3>
                     <p className={`text-sm ${textClass}`}>{item.description}</p>
                     <div className="mt-3">
-                      <span className={`px-3 py-1 rounded-full text-xs ${
-                        item.type === 'achievement' ? 'bg-yellow-500/20 text-yellow-400' :
-                        item.type === 'education' ? 'bg-blue-500/20 text-blue-400' :
-                        item.type === 'project' ? 'bg-green-500/20 text-green-400' :
-                        'bg-purple-500/20 text-purple-400'
-                      }`}>
+                     <span
+                      className={`px-3 py-1 rounded-full text-xs ${
+                      item.type === 'career'
+                      ? 'bg-pink-500/20 text-pink-400'
+                      : item.type === 'achievement'
+                      ? 'bg-yellow-500/20 text-yellow-400'
+                      : item.type === 'education'
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : item.type === 'project'
+                      ? 'bg-green-500/20 text-green-400'
+                      : 'bg-purple-500/20 text-purple-400'
+                      }`}
+                      >
                         {item.type}
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className={`absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full ${
+                  item.type === 'career' ? 'bg-pink-400' :
                   item.type === 'achievement' ? 'bg-yellow-400' :
                   item.type === 'education' ? 'bg-blue-400' :
                   item.type === 'project' ? 'bg-green-400' :
+                  item.type === 'career' ? 'bg-pink-400' :
                   'bg-purple-400'
                 } border-4 ${isDarkMode ? 'border-slate-950' : 'border-gray-50'}`}
                 style={{ top: '24px' }}
@@ -594,7 +645,7 @@ export default function Portfolio() {
           <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
             Skills & Expertise
           </h2>
-
+ 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {skills.map((category, idx) => (
               <div
@@ -792,7 +843,7 @@ export default function Portfolio() {
             </a>
             <span>|</span>
             <span className="flex items-center gap-2">
-              📞 759*****58 
+              📞 7599926158 
             </span>
           </div>
         </div>
