@@ -33,7 +33,39 @@ export default function Portfolio() {
   "REST API Developer"
 ];
 
+const [textIndex, setTextIndex] = useState(0);
+const [isDeleting, setIsDeleting] = useState(false);
 
+useEffect(() => {
+  const currentText = texts[textIndex];
+
+  const typingSpeed = isDeleting ? 50 : 100;
+
+  const timeout = setTimeout(() => {
+    if (!isDeleting) {
+      // Typing effect
+      setTypedText(currentText.substring(0, typedText.length + 1));
+
+      // Pause after typing complete
+      if (typedText === currentText) {
+        setTimeout(() => {
+          setIsDeleting(true);
+        }, 1200);
+      }
+    } else {
+      // Deleting effect
+      setTypedText(currentText.substring(0, typedText.length - 1));
+
+      // Move to next text
+      if (typedText === "") {
+        setIsDeleting(false);
+        setTextIndex((prev) => (prev + 1) % texts.length);
+      }
+    }
+  }, typingSpeed);
+
+  return () => clearTimeout(timeout);
+}, [typedText, isDeleting, textIndex]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
