@@ -13,86 +13,53 @@ export default function Portfolio() {
   const [typedText, setTypedText] = useState('');
   const statsRef = useRef(null);
   const [hasAnimatedStats, setHasAnimatedStats] = useState(false);
-
-  // New: skills intersection animation
   const skillsRef = useRef(null);
   const [skillsInView, setSkillsInView] = useState(false);
 
   const texts = [
-  "Full Stack Developer",
-  "Software Engineer",
-  "Java Developer",
-  "React Developer",
-  "Spring Boot Developer",
-  "Backend Developer",
-  "Frontend Developer",
-  "Problem Solver",
-  "Tech Enthusiast",
-  "DSA Enthusiast",
-  "Cloud Learner",
-  "REST API Developer"
-];
+    "Software Developer",
+    "Java Developer",
+    "Full Stack Developer",
+    "React Developer",
+    "Spring Boot Developer",
+    "Backend Developer",
+    "Frontend Developer",
+    "Tech Enthusiast",
+    "REST API Developer"
+  ];
 
-const [textIndex, setTextIndex] = useState(0);
-const [isDeleting, setIsDeleting] = useState(false);
-
-useEffect(() => {
-  const currentText = texts[textIndex];
-
-  const typingSpeed = isDeleting ? 50 : 100;
-
-  const timeout = setTimeout(() => {
-    if (!isDeleting) {
-      // Typing effect
-      setTypedText(currentText.substring(0, typedText.length + 1));
-
-      // Pause after typing complete
-      if (typedText === currentText) {
-        setTimeout(() => {
-          setIsDeleting(true);
-        }, 1200);
-      }
-    } else {
-      // Deleting effect
-      setTypedText(currentText.substring(0, typedText.length - 1));
-
-      // Move to next text
-      if (typedText === "") {
-        setIsDeleting(false);
-        setTextIndex((prev) => (prev + 1) % texts.length);
-      }
-    }
-  }, typingSpeed);
-
-  return () => clearTimeout(timeout);
-}, [typedText, isDeleting, textIndex]);
+  const [textIndex, setTextIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
+    const currentText = texts[textIndex];
+    const typingSpeed = isDeleting ? 50 : 100;
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        setTypedText(currentText.substring(0, typedText.length + 1));
+        if (typedText === currentText) {
+          setTimeout(() => setIsDeleting(true), 1200);
+        }
+      } else {
+        setTypedText(currentText.substring(0, typedText.length - 1));
+        if (typedText === "") {
+          setIsDeleting(false);
+          setTextIndex((prev) => (prev + 1) % texts.length);
+        }
+      }
+    }, typingSpeed);
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, textIndex]);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
+    const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
-
-  useEffect(() => {
-    let currentIndex = 0;
-    const typingInterval = setInterval(() => {
-      if (currentIndex <= fullText.length) {
-        setTypedText(fullText.substring(0, currentIndex));
-        currentIndex++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, 50);
-    return () => clearInterval(typingInterval);
   }, []);
 
   useEffect(() => {
@@ -110,23 +77,15 @@ useEffect(() => {
       },
       { threshold: 0.5 }
     );
-
-    if (statsRef.current) {
-      observer.observe(statsRef.current);
-    }
-
+    if (statsRef.current) observer.observe(statsRef.current);
     return () => observer.disconnect();
   }, [hasAnimatedStats]);
 
-  // New: observe skills section and animate bars once
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setSkillsInView(true);
-            obs.disconnect();
-          }
+          if (entry.isIntersecting) { setSkillsInView(true); obs.disconnect(); }
         });
       },
       { threshold: 0.25 }
@@ -142,9 +101,7 @@ useEffect(() => {
       const progress = Math.min(elapsed / duration, 1);
       const value = Math.floor(start + (end - start) * progress);
       setStats(prev => ({ ...prev, [key]: value }));
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
+      if (progress < 1) requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
   };
@@ -157,567 +114,736 @@ useEffect(() => {
 
   const allProjects = [
     {
-      title: "ZoneOut - Turf Booking Platform",
-      Description:"A scalable full-stack turf booking system with real-time slot verification, Razorpay payment integration, and role-based access control for customers, providers, and admins. The system enables seamless turf discovery, slot booking, and secure online payments with instant confirmation. It features provider dashboards for turf and slot management, customer review and rating modules, and an admin panel for monitoring users, bookings, and payments. Built with Spring Boot, React, and RESTful APIs, the application ensures high performance, scalability, and data consistency across services.",
-      tech: ["React", "Spring Boot","MVC", "Lombok", "JWT-based authentication and authorization","Spring Security", "MySQL", "ASP.NET", "Razorpay", "Tailwind CSS"],
-      gradient: "from-purple-500 to-pink-500",
-      link: "https://github.com/D1-zoneout",
-      period: "July 2025 - Aug 2025",
+      title: "Online Grocery Store",
+      description: "Developed a full-stack e-commerce grocery platform with secure authentication, product management, cart functionality, and order tracking. Implemented category-wise product search, QR payments, inventory updates, toast notifications, and admin dashboard.",
+      tech: ["React", "Spring Boot", "MySQL", "REST APIs", "JavaScript", "Tailwind CSS"],
+      gradient: "from-pink-500 to-rose-500",
+      link: "#",
+      period: "Feb 2025 - Aug 2025",
       category: "Full-Stack"
-    },
-    {
-      title: "Vehicle Theft Detection System",
-      Description: "IoT-based theft detection system with SMS alerts and remote ignition control using GSM module and microcontroller with embedded logic in MATLAB.",
-      tech: ["GSM", "Microcontroller", "MATLAB", "Embedded Systems"],
-      gradient: "from-blue-500 to-cyan-500",
-      link: "#",
-      period: "Oct 2023 - Apr 2024",
-      category: "IoT"
-    },
-    {
-      title: "Metrology Tool Automation GUI",
-      description: "Automated data entry system for semiconductor metrology tools at SCL Mohali, improving efficiency by 20% using PyQt5 and QT Designer.",
-      tech: ["Python", "PyQt5", "QT Designer", "GUI Development"],
-      gradient: "from-orange-500 to-red-500",
-      link: "#",
-      period: "May 2023 - June 2023",
-      category: "Backend"
     }
   ];
 
-  const filteredProjects = projectFilter === 'All' 
-    ? allProjects 
+  const filteredProjects = projectFilter === 'All'
+    ? allProjects
     : allProjects.filter(p => p.category === projectFilter);
 
   const skills = [
-    { 
-      name: "Frontend", 
+    {
+      name: "Frontend",
       items: [
-        { name: "React", level: 65 },
-        { name: "JavaScript", level: 60 },
-        { name: "HTML/CSS", level: 80 },
-        { name: "Tailwind CSS", level: 65 },
-        { name: "Bootstrap", level: 65 }
-      ], 
-      icon: <Palette /> 
+        { name: "React", level: 80 },
+        { name: "JavaScript", level: 75 },
+        { name: "HTML/CSS", level: 90 },
+        { name: "Tailwind CSS", level: 85 },
+        { name: "Bootstrap", level: 80 }
+      ],
+      icon: <Palette />
     },
-    { 
-      name: "Backend", 
+    {
+      name: "Backend",
       items: [
-        { name: "Spring Boot", level: 75 },
-        { name: "ASP.NET", level: 70 },
-        { name: "REST APIs", level: 75 },
-        { name: "Node.js", level: 60 },
-        { name: "MVC", level: 70 }
-      ], 
-      icon: <Code /> 
+        { name: "Spring Boot", level: 82 },
+        { name: "ASP.NET", level: 72 },
+        { name: "REST APIs", level: 85 },
+        { name: "Node.js", level: 65 },
+        { name: "MVC", level: 75 }
+      ],
+      icon: <Code />
     },
-    { 
-      name: "Languages", 
+    {
+      name: "Programming",
       items: [
-        { name: "Java", level: 80 },
-        { name: "C++", level: 75 },
-        { name: "C", level: 60 },
-        { name: "C#", level: 70 },
-        { name: "Python", level: 50 }
-      ], 
-      icon: <Code /> 
+        { name: "Java", level: 88 },
+        { name: "C++", level: 78 }
+      ],
+      icon: <Code />
     },
-    { 
-      name: "Databases", 
+    {
+      name: "Database",
       items: [
         { name: "MySQL", level: 85 },
-        { name: "MongoDB", level: 60 },
-        { name: "RDBMS", level: 70 }
-      ], 
-      icon: <Code /> 
+        { name: "MongoDB", level: 70 },
+        { name: "RDBMS", level: 78 }
+      ],
+      icon: <Code />
     },
-    { 
-      name: "DevOps & Cloud", 
+    {
+      name: "Tools",
       items: [
-        { name: "Docker", level: 40 },
-        { name: "Kubernetes", level: 35 },
-        { name: "AWS (EC2, S3)", level: 40 },
-        { name: "Linux", level: 35 }
-      ], 
-      icon: <Zap /> 
-    },
-    { 
-      name: "Tools", 
-      items: [
-        { name: "Git/GitHub", level: 80 },
-        { name: "VS Code", level: 78 },
-        { name: "Visual Studio", level: 75 },
-        { name: "STS", level: 72 }
-      ], 
-      icon: <Zap /> 
+        { name: "Git/GitHub", level: 82 },
+        { name: "VS Code", level: 88 },
+        { name: "Visual Studio", level: 78 },
+        { name: "STS", level: 75 }
+      ],
+      icon: <Zap />
     }
   ];
 
   const achievements = [
     {
-      title: "AIR 16 in PreCAT Examination",
-      description: "Secured All India Rank 16 among thousands of candidates",
+      title: "CDAC Certified",
+      description: "Successfully completed Diploma in Advanced Computing",
       year: "2025",
-      icon: <Award className="text-yellow-400" size={24} />
+      icon: <Award className="text-pink-400" size={24} />
     },
     {
-      title: "Top 25% Academic Excellence",
-      description: "Ranked 56th out of 240 students in cohort at CDAC",
-      year: "2025",
-      icon: <GraduationCap className="text-blue-400" size={24} />
+      title: "Advanced Python Training",
+      description: "Industrial Training Program by Fantacy Technologies",
+      year: "2024",
+      icon: <Code className="text-purple-400" size={24} />
     },
     {
-      title: "94.6% in 12th CBSE Board",
-      description: "Outstanding academic performance in senior secondary",
-      year: "2020",
-      icon: <Award className="text-green-400" size={24} />
+      title: "TCS iON Communication Skills",
+      description: "Certified Communication Skills Program",
+      year: "2024",
+      icon: <GraduationCap className="text-rose-400" size={24} />
     }
   ];
 
   const education = [
     {
-      degree: "Diploma in Advanced Computing (DAC)",
-      institution: "Sunbeam Institute of Information Technology, Pune",
+      degree: "CDAC in Advanced Computing",
+      institution: "Sunbeam Institute Of Information Technology, Pune",
       period: "Feb 2025 - Aug 2025",
-      score: "70.94%"
+      score: ""
     },
     {
-      degree: "B.Tech in Electronics & Communication Engineering",
-      institution: "Bundelkhand Institute of Engineering & Technology, Jhansi",
-      period: "Completed July 2024",
-      score: "CGPA: 7.43"
+      degree: "B.Tech in Computer Science Engineering",
+      institution: "Terna College of Engineering, Osmanabad",
+      period: "Jun 2021 - May 2024",
+      score: "80.00%"
+    },
+    {
+      degree: "HSC",
+      institution: "Dr. Chandrabhanu Sonvane Jr. College, Ukkadgaon",
+      period: "Jun 2018 - May 2019",
+      score: "64.38%"
+    },
+    {
+      degree: "SSC",
+      institution: "Janata Vidyalay, Yedshi",
+      period: "Jun 2016 - May 2017",
+      score: "71.80%"
     }
   ];
 
-  const timeline = [  
-  {
-    year: "Present",
-    title: "Java Developer at Bajaj",
-    description: "Working on enterprise-level Java applications and backend development",
-    type: "career"
-  },
+  const timeline = [
+    { year: "2025", title: "CDAC in Advanced Computing", description: "Sunbeam Institute Of Information Technology, Pune", type: "education" },
+    { year: "2025", title: "Online Grocery Store Project", description: "Developed full-stack grocery e-commerce application", type: "project" },
+    { year: "2024", title: "B.Tech Completed", description: "Computer Science Engineering - 80%", type: "education" },
+    { year: "2024", title: "Advanced Python Training", description: "Industrial Training Program - Fantacy Technologies", type: "achievement" },
+    { year: "2024", title: "TCS iON Communication Skills", description: "Professional communication certification", type: "achievement" }
+  ];
 
-  {
-    year: "July 2025",
-    title: "ZoneOut Project",
-    description: "Full-stack turf booking platform with payment integration",
-    type: "project"
-  },  
-
-  {
-    year: "Feb 2025 - Aug 2025",
-    title: "Diploma in Advanced Computing",
-    description: "Sunbeam Institute, Pune - 70.94%",
-    type: "education"
-  },
-
-  {
-    year: "Feb 2025",
-    title: "AIR 16 in PreCAT",
-    description: "Secured All India Rank 16 among thousands of candidates",
-    type: "achievement"
-  },    
-
-  {
-    year: "July 2024",
-    title: "B.Tech Completed",
-    description: "Electronics & Communication Engineering - CGPA 7.43",
-    type: "education"
-  },
-
-  {
-    year: "Oct 2023 - Apr 2024",
-    title: "Vehicle Theft Detection System",
-    description: "IoT-based project with SMS alerts",
-    type: "project"
-  },
-
-  {
-    year: "May 2023",
-    title: "SCL Mohali Internship",
-    description: "GUI automation improving efficiency by 20%",
-    type: "internship"
-  },
-
-  {
-    year: "2020",
-    title: "12th CBSE Board - 94.6%",
-    description: "School Topper and Branch Topper in Senior Secondary",
-    type: "education"
-  },
-
-  {
-    year: "2018",
-    title: "10th State(UP) Board - 89.6%",
-    description: "Ranked among Top 3 students in school",
-    type: "education"
-  }
-];
-
-  const bgClass = isDarkMode 
-    ? "bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white"
-    : "bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50 text-gray-900";
-
-  const cardClass = isDarkMode
-    ? "bg-slate-900/50 border-white/10"
-    : "bg-white/80 border-purple-200";
-
-  const textClass = isDarkMode ? "text-gray-400" : "text-gray-600";
+  const dark = isDarkMode;
 
   return (
-    <div className={`min-h-screen ${bgClass} overflow-hidden transition-colors duration-500`}>
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+    <div className={`min-h-screen font-sans overflow-hidden transition-colors duration-700 ${dark ? 'bg-[#0f0a14] text-white' : 'bg-[#fdf6f9] text-[#2a1a22]'}`}>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+        * { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3, .serif { font-family: 'Cormorant Garamond', serif; }
+
+        /* Petal cursor trail */
+        @keyframes petalFall {
+          0% { opacity: 0.7; transform: scale(1) rotate(0deg) translateY(0); }
+          100% { opacity: 0; transform: scale(0.3) rotate(180deg) translateY(40px); }
+        }
+
+        /* Floating petals */
+        @keyframes floatPetal {
+          0%, 100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.12; }
+          33% { transform: translateY(-28px) rotate(120deg) scale(1.1); opacity: 0.2; }
+          66% { transform: translateY(-14px) rotate(240deg) scale(0.9); opacity: 0.15; }
+        }
+
+        /* Silk shimmer on cards */
+        @keyframes silkShimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+
+        /* Blossom card hover */
+        .blossom-card {
+          position: relative;
+          transition: transform 0.45s cubic-bezier(.2,.9,.2,1), box-shadow 0.45s ease, border-color 0.45s ease;
+          overflow: hidden;
+        }
+        .blossom-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,182,193,0.08) 0%, rgba(218,165,232,0.06) 50%, rgba(255,160,180,0.04) 100%);
+          opacity: 0;
+          transition: opacity 0.45s ease;
+          border-radius: inherit;
+          pointer-events: none;
+          z-index: 0;
+        }
+        .blossom-card::after {
+          content: '✿';
+          position: absolute;
+          bottom: -24px;
+          right: -12px;
+          font-size: 72px;
+          opacity: 0;
+          transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.2,.9,.2,1), bottom 0.5s ease;
+          pointer-events: none;
+          background: linear-gradient(135deg, #f9a8d4, #e879f9);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          z-index: 0;
+        }
+        .blossom-card:hover {
+          transform: translateY(-8px) scale(1.025);
+          box-shadow: 0 24px 56px rgba(232, 121, 249, 0.18), 0 4px 20px rgba(249, 168, 212, 0.14);
+        }
+        .blossom-card:hover::before { opacity: 1; }
+        .blossom-card:hover::after { opacity: 0.2; bottom: -6px; transform: rotate(-12deg); }
+
+        /* Petal tag hover */
+        .petal-tag {
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        .petal-tag::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, transparent, rgba(249,168,212,0.2), transparent);
+          transform: translateX(-100%);
+          transition: transform 0.5s ease;
+        }
+        .petal-tag:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,121,249,0.2); }
+        .petal-tag:hover::after { transform: translateX(100%); }
+
+        /* Nav link */
+        .nav-link {
+          position: relative;
+          transition: color 0.3s ease;
+        }
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: -4px; left: 50%;
+          width: 0; height: 1.5px;
+          background: linear-gradient(90deg, #f9a8d4, #e879f9);
+          transition: all 0.35s ease;
+          transform: translateX(-50%);
+          border-radius: 99px;
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link:hover, .nav-link.active { color: #f9a8d4; }
+
+        /* Skill bars */
+        .skill-row { --w: 50%; }
+        .skill-bar-inner {
+          width: 0;
+          background: linear-gradient(90deg, #f9a8d4 0%, #e879f9 60%, #c084fc 100%);
+          box-shadow: 0 2px 12px rgba(232,121,249,0.2);
+          transition: width 800ms cubic-bezier(.2,.9,.2,1), box-shadow 400ms ease;
+          max-width: 100%; height: 100%;
+        }
+        .skills-in-view .skill-bar-inner { width: var(--w); }
+        .blossom-card:hover .skill-bar-inner,
+        .skill-row:hover .skill-bar-inner {
+          width: min(100%, calc(var(--w) + 8%));
+          box-shadow: 0 4px 18px rgba(232,121,249,0.3);
+        }
+
+        /* Button bloom */
+        .bloom-btn {
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bloom-btn::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at center, rgba(255,255,255,0.18) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+        .bloom-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(232,121,249,0.35); }
+        .bloom-btn:hover::after { opacity: 1; }
+
+        /* Timeline dot pulse */
+        @keyframes dotPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(249,168,212,0.5); }
+          50% { box-shadow: 0 0 0 8px rgba(249,168,212,0); }
+        }
+        .timeline-dot { animation: dotPulse 2.5s ease-in-out infinite; }
+
+        /* Stat card shimmer on hover */
+        .stat-card {
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .stat-card::after {
+          content: '';
+          position: absolute;
+          top: -50%; left: -60%;
+          width: 40%; height: 200%;
+          background: linear-gradient(90deg, transparent, rgba(249,168,212,0.12), transparent);
+          transform: skewX(-20deg);
+          opacity: 0;
+          transition: none;
+        }
+        .stat-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(232,121,249,0.2); }
+        .stat-card:hover::after {
+          opacity: 1;
+          animation: shimmerSweep 0.7s ease forwards;
+        }
+        @keyframes shimmerSweep {
+          0% { left: -60%; }
+          100% { left: 130%; }
+        }
+
+        /* Input focus bloom */
+        .petal-input {
+          transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease;
+        }
+        .petal-input:focus {
+          outline: none;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 20px rgba(249,168,212,0.2);
+        }
+
+        /* Achievement badge hover */
+        .badge-card {
+          transition: transform 0.4s cubic-bezier(.2,.9,.2,1), box-shadow 0.4s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        .badge-card::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #f9a8d4, #e879f9, #c084fc);
+          transform: scaleX(0);
+          transition: transform 0.45s ease;
+          transform-origin: left;
+        }
+        .badge-card:hover { transform: translateY(-10px) rotate(-0.5deg); box-shadow: 0 28px 60px rgba(232,121,249,0.22); }
+        .badge-card:hover::before { transform: scaleX(1); }
+
+        /* Education border highlight */
+        .edu-item {
+          transition: all 0.35s ease;
+          border-left: 2px solid rgba(249,168,212,0.3);
+          padding-left: 1rem;
+        }
+        .edu-item:hover {
+          border-left-color: #f9a8d4;
+          transform: translateX(4px);
+        }
+
+        /* Section heading underline */
+        .section-heading {
+          position: relative;
+          display: inline-block;
+        }
+        .section-heading::after {
+          content: '';
+          position: absolute;
+          bottom: -8px; left: 50%;
+          transform: translateX(-50%);
+          width: 60px; height: 2px;
+          background: linear-gradient(90deg, #f9a8d4, #e879f9);
+          border-radius: 99px;
+        }
+
+        /* Project card overlay */
+        .project-reveal {
+          position: relative;
+          overflow: hidden;
+        }
+        .project-reveal .reveal-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(249,168,212,0.06), rgba(232,121,249,0.10));
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          border-radius: inherit;
+        }
+        .project-reveal:hover .reveal-overlay { opacity: 1; }
+
+        /* Floating orbs */
+        @keyframes orbDrift {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          25% { transform: translate(30px, -20px) scale(1.05); }
+          50% { transform: translate(-20px, 30px) scale(0.95); }
+          75% { transform: translate(20px, 10px) scale(1.02); }
+        }
+      `}</style>
+
+      {/* Background orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div
+          className="absolute w-[500px] h-[500px] rounded-full blur-3xl opacity-[0.12]"
+          style={{
+            background: dark
+              ? 'radial-gradient(circle, #e879f9 0%, #f9a8d4 60%, transparent 100%)'
+              : 'radial-gradient(circle, #f9a8d4 0%, #fce7f3 60%, transparent 100%)',
+            left: `${mousePosition.x / 25}px`,
+            top: `${mousePosition.y / 25}px`,
+            transition: 'all 0.6s ease-out',
+            animation: 'orbDrift 18s ease-in-out infinite',
+          }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full blur-3xl opacity-[0.1]"
+          style={{
+            background: dark
+              ? 'radial-gradient(circle, #c084fc 0%, #e879f9 100%)'
+              : 'radial-gradient(circle, #e9d5ff 0%, #fce7f3 100%)',
+            animation: 'orbDrift 22s ease-in-out infinite reverse',
+            transform: `translateY(${scrollY * 0.2}px)`,
+          }}
+        />
+        <div
+          className="absolute bottom-1/4 left-1/4 w-72 h-72 rounded-full blur-3xl opacity-[0.08]"
+          style={{
+            background: dark
+              ? 'radial-gradient(circle, #fb7185 0%, #f9a8d4 100%)'
+              : 'radial-gradient(circle, #fecdd3 0%, #fce7f3 100%)',
+            animation: 'orbDrift 26s ease-in-out infinite',
+            transform: `translateY(${scrollY * 0.15}px)`,
+          }}
+        />
+        {/* Floating petals */}
+        {[...Array(14)].map((_, i) => (
           <div
             key={i}
-            className={`absolute w-2 h-2 ${isDarkMode ? 'bg-purple-400' : 'bg-purple-600'} rounded-full opacity-20`}
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `float ${5 + Math.random() * 10}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`
+              position: 'absolute',
+              left: `${(i * 7.3) % 100}%`,
+              top: `${(i * 13.7) % 100}%`,
+              fontSize: `${10 + (i % 4) * 6}px`,
+              animation: `floatPetal ${8 + i * 1.3}s ease-in-out infinite`,
+              animationDelay: `${i * 0.7}s`,
+              color: ['#f9a8d4', '#e879f9', '#c084fc', '#fb7185'][i % 4],
+              pointerEvents: 'none',
+              userSelect: 'none',
             }}
-          />
+          >
+            {['✿', '❀', '✾', '❁'][i % 4]}
+          </div>
         ))}
       </div>
 
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className={`absolute w-96 h-96 ${isDarkMode ? 'bg-purple-600' : 'bg-purple-400'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse`}
-          style={{
-            left: `${mousePosition.x / 20}px`,
-            top: `${mousePosition.y / 20}px`,
-            transition: 'all 0.5s ease-out',
-            transform: `translateY(${scrollY * 0.5}px)`
-          }}
-        />
-        <div 
-          className={`absolute top-1/4 right-1/4 w-96 h-96 ${isDarkMode ? 'bg-pink-600' : 'bg-pink-400'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse`}
-          style={{ transform: `translateY(${scrollY * 0.3}px)` }}
-        />
-        <div 
-          className={`absolute bottom-1/4 left-1/3 w-96 h-96 ${isDarkMode ? 'bg-blue-600' : 'bg-blue-400'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse`}
-          style={{ transform: `translateY(${scrollY * 0.4}px)` }}
-        />
-      </div>
-
-      <style>
-        {`
-          @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-          }
-
-          /* SKILL BAR: base and entrance/hover/focus animations */
-          .skill-row { --w: 50%; } /* fallback */
-
-          /* default state: collapsed bars for entrance animation */
-          .skill-bar-inner {
-            width: 0;
-            background: linear-gradient(90deg, rgba(139,92,246,1) 0%, rgba(236,72,153,1) 100%);
-            box-shadow: 0 0 0 rgba(0,0,0,0);
-            filter: none;
-            transform-origin: left center;
-            transition: width 700ms cubic-bezier(.2,.9,.2,1), box-shadow 400ms ease, filter 400ms ease, transform 200ms ease;
-            max-width: 100%;
-            height: 100%;
-          }
-
-          /* When the skills section is observed, set width to var(--w) (entrance animation) */
-          .skills-in-view .skill-bar-inner {
-            width: var(--w);
-          }
-
-          /* Hover / focus grow and glow (clamped to 100%) */
-          .skill-card:hover .skill-bar-inner,
-          .skill-row:hover .skill-bar-inner,
-          .skill-row:focus .skill-bar-inner,
-          .skills-in-view .skill-row:focus .skill-bar-inner {
-            width: min(100%, calc(var(--w) + 10%));
-            box-shadow: 0 6px 22px rgba(139,92,246,0.18), 0 0 30px rgba(236,72,153,0.12);
-            filter: drop-shadow(0 6px 18px rgba(139,92,246,0.12));
-            transform: scaleY(1.05);
-          }
-
-          /* Slightly smaller increase on small screens */
-          @media (max-width: 640px) {
-            .skill-card:hover .skill-bar-inner,
-            .skill-row:hover .skill-bar-inner {
-              width: min(100%, calc(var(--w) + 6%));
-            }
-          }
-
-          /* keyboard focus outline for accessibility */
-          .skill-row:focus {
-            outline: 2px solid rgba(139,92,246,0.12);
-            outline-offset: 4px;
-            border-radius: 8px;
-          }
-        `}
-      </style>
-
-      <nav className={`fixed top-0 w-full z-50 backdrop-blur-md ${isDarkMode ? 'bg-slate-950/30' : 'bg-white/30'} border-b ${isDarkMode ? 'border-white/10' : 'border-purple-200'}`}>
+      {/* NAV */}
+      <nav className={`fixed top-0 w-full z-50 backdrop-blur-xl border-b transition-colors duration-500 ${dark ? 'bg-[#0f0a14]/70 border-pink-900/20' : 'bg-white/60 border-pink-200/60'}`}>
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            SV Portfolio
+          <div className="serif text-2xl font-light tracking-widest" style={{
+            background: 'linear-gradient(90deg, #f9a8d4, #e879f9)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+          }}>
+            Soniya Swami
           </div>
-          
+
           <div className="hidden md:flex gap-8 items-center">
             {['Home', 'About', 'Projects', 'Skills', 'Timeline', 'Achievements', 'Contact'].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
                 onClick={() => setActiveSection(item.toLowerCase())}
-                className={`hover:text-purple-400 transition-colors cursor-pointer ${
-                  activeSection === item.toLowerCase() ? 'text-purple-400' : ''
-                }`}
+                className={`nav-link text-sm tracking-wide ${activeSection === item.toLowerCase() ? 'active' : ''} ${dark ? 'text-pink-100/80' : 'text-rose-900/70'}`}
               >
                 {item}
               </a>
             ))}
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 rounded-full hover:bg-purple-500/20 transition-colors"
+              className={`p-2 rounded-full transition-all hover:scale-110 ${dark ? 'hover:bg-pink-900/30' : 'hover:bg-pink-100'}`}
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={18} className="text-pink-300" /> : <Moon size={18} className="text-pink-600" />}
             </button>
           </div>
 
           <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X /> : <Menu />}
+            {isMenuOpen ? <X className="text-pink-400" /> : <Menu className="text-pink-400" />}
           </button>
         </div>
 
         {isMenuOpen && (
-          <div className={`md:hidden ${isDarkMode ? 'bg-slate-900/95' : 'bg-white/95'} backdrop-blur-lg`}>
+          <div className={`md:hidden backdrop-blur-xl ${dark ? 'bg-[#0f0a14]/95' : 'bg-white/95'}`}>
             {['Home', 'About', 'Projects', 'Skills', 'Timeline', 'Achievements', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="block px-6 py-3 hover:bg-purple-500/20 transition-colors"
+              <a key={item} href={`#${item.toLowerCase()}`}
+                className={`block px-6 py-3 text-sm tracking-wide transition-colors ${dark ? 'hover:bg-pink-900/20 hover:text-pink-300' : 'hover:bg-pink-50 hover:text-pink-700'}`}
                 onClick={() => setIsMenuOpen(false)}
-              >
-                {item}
-              </a>
+              >{item}</a>
             ))}
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="w-full px-6 py-3 text-left hover:bg-purple-500/20 transition-colors flex items-center gap-2"
+            <button onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`w-full px-6 py-3 text-left text-sm flex items-center gap-2 ${dark ? 'hover:bg-pink-900/20' : 'hover:bg-pink-50'}`}
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-              {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+              {isDarkMode ? <><Sun size={16} className="text-pink-300" /> Light Mode</> : <><Moon size={16} className="text-pink-600" /> Dark Mode</>}
             </button>
           </div>
         )}
       </nav>
 
-      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-20">
-        <div className="max-w-4xl text-center space-y-8" style={{ transform: `translateY(${scrollY * 0.2}px)` }}>
+      {/* HERO */}
+      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-24 z-10">
+        <div className="max-w-4xl text-center space-y-10" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+          {/* Decorative ring */}
+          <div className="relative inline-block mx-auto mb-2">
+            <div className="w-32 h-32 mx-auto rounded-full flex items-center justify-center text-5xl"
+              style={{
+                background: dark
+                  ? 'linear-gradient(135deg, rgba(249,168,212,0.15), rgba(232,121,249,0.1))'
+                  : 'linear-gradient(135deg, rgba(249,168,212,0.3), rgba(232,121,249,0.2))',
+                border: '1px solid rgba(249,168,212,0.3)',
+                boxShadow: '0 8px 32px rgba(232,121,249,0.15)',
+              }}>
+              ❀
+            </div>
+          </div>
+
           <div className="space-y-4">
-            <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-pulse">
-              Shubh Vaish
+            <h1 className="serif text-6xl md:text-8xl font-light tracking-wide leading-none"
+              style={{ background: 'linear-gradient(135deg, #f9a8d4 0%, #e879f9 50%, #c084fc 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Soniya Swami
             </h1>
-            <p className="text-2xl md:text-3xl h-12">
-              {typedText}<span className="animate-pulse">|</span>
+
+            {/* Decorative divider */}
+            <div className="flex items-center justify-center gap-3 py-1">
+              <div className="h-px w-16" style={{ background: 'linear-gradient(90deg, transparent, #f9a8d4)' }} />
+              <span className="text-pink-400 text-xs tracking-[0.4em] uppercase">Portfolio</span>
+              <div className="h-px w-16" style={{ background: 'linear-gradient(90deg, #f9a8d4, transparent)' }} />
+            </div>
+
+            <p className={`text-xl md:text-2xl h-10 font-light tracking-wider ${dark ? 'text-pink-200/80' : 'text-rose-700/80'}`}>
+              {typedText}<span className="animate-pulse text-pink-400">|</span>
             </p>
-            <p className={`text-lg ${textClass} max-w-2xl mx-auto`}>
-              Passionate about building scalable applications with modern technologies. 
+
+            <p className={`text-base leading-relaxed max-w-xl mx-auto font-light ${dark ? 'text-pink-100/50' : 'text-rose-800/60'}`}>
+              Passionate about building scalable applications with modern technologies.
               Specialized in Java, Spring Boot, React, and cloud-native solutions.
             </p>
-            <div className={`flex gap-4 justify-center text-sm ${textClass} flex-wrap`}>
+
+            <div className={`flex gap-4 justify-center text-sm flex-wrap ${dark ? 'text-pink-200/60' : 'text-rose-700/60'}`}>
               <span className="flex items-center gap-2">
-                <Mail size={16} /> shubhvaish2002@gmail.com
+                <Mail size={14} className="text-pink-400" /> soniyaswami9689@gmail.com
               </span>
-              <span>|</span>
-              <span>📞 7599926158</span>
+              <span className="text-pink-400/40">·</span>
+              <span>📞 9689309057</span>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-6 justify-center pt-8">
-            <a href="#contact" className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-semibold hover:scale-105 transition-transform shadow-lg shadow-purple-500/50 text-white">
+          {/* CTA buttons */}
+          <div className="flex flex-wrap gap-4 justify-center pt-4">
+            <a href="#contact" className="bloom-btn px-8 py-3 rounded-full text-sm font-medium tracking-wide text-white"
+              style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9)' }}>
               Get In Touch
             </a>
-            <a href="#projects" className="px-8 py-3 border-2 border-purple-500 rounded-full font-semibold hover:bg-purple-500/20 transition-colors">
+            <a href="#projects"
+              className={`bloom-btn px-8 py-3 rounded-full text-sm font-medium tracking-wide border transition-colors ${dark ? 'border-pink-400/40 text-pink-300 hover:bg-pink-900/20' : 'border-pink-400 text-pink-700 hover:bg-pink-50'}`}>
               View Projects
             </a>
-            <a href=" /portfolio/Resume.pdf" className="px-8 py-3 border-2 border-pink-500 rounded-full font-semibold hover:bg-pink-500/20 transition-colors inline-flex items-center gap-2" target="_blank" rel="noopener noreferrer">
-              <Download size={18} /> Resume
+            <a href="/portfolio/Resume.pdf" target="_blank" rel="noopener noreferrer"
+              className={`bloom-btn px-8 py-3 rounded-full text-sm font-medium tracking-wide border inline-flex items-center gap-2 transition-colors ${dark ? 'border-rose-400/40 text-rose-300 hover:bg-rose-900/20' : 'border-rose-400 text-rose-700 hover:bg-rose-50'}`}>
+              <Download size={15} /> Resume
             </a>
           </div>
 
-          <div className="flex gap-6 justify-center pt-8">
-            <a href="https://github.com/Shadow2002-hub" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors hover:scale-110 transform">
-              <Github size={28} />
-            </a>
-            <a href="https://www.linkedin.com/in/shubh-vaish-945b4a214/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors hover:scale-110 transform">
-              <Linkedin size={28} />
-            </a>
-            <a href="mailto:shubhvaish2002@gmail.com" className="hover:text-purple-400 transition-colors hover:scale-110 transform">
-              <Mail size={28} />
-            </a>
+          {/* Social links */}
+          <div className="flex gap-6 justify-center pt-2">
+            {[
+              { icon: <Github size={22} />, href: "https://github.com/Shadow2002-hub" },
+              { icon: <Linkedin size={22} />, href: "https://www.linkedin.com/in/shubh-vaish-945b4a214/" },
+              { icon: <Mail size={22} />, href: "mailto:soniyaswami9689@gmail.com" },
+            ].map((s, i) => (
+              <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
+                className={`p-2.5 rounded-full border transition-all hover:scale-110 hover:-translate-y-1 ${dark ? 'border-pink-400/20 text-pink-300/60 hover:text-pink-300 hover:border-pink-400/50 hover:bg-pink-900/20' : 'border-pink-300 text-pink-500 hover:bg-pink-50'}`}>
+                {s.icon}
+              </a>
+            ))}
           </div>
         </div>
       </section>
 
-      <section ref={statsRef} className="relative py-20 px-6">
+      {/* STATS */}
+      <section ref={statsRef} className="relative py-20 px-6 z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-4 gap-6">
             {[
-              { icon: <Target />, value: stats.projects, label: "Major Projects", suffix: "+" },
-              { icon: <Code />, value: stats.problems, label: "DSA Problems", suffix: "+" },
-              { icon: <Award />, value: stats.rank, label: "AIR PreCAT", suffix: "" },
-              { icon: <TrendingUp />, value: stats.efficiency, label: "Efficiency Boost", suffix: "%" }
+              { icon: <Target size={20} />, value: stats.projects, label: "Major Projects", suffix: "+" },
+              { icon: <Code size={20} />, value: stats.problems, label: "DSA Problems", suffix: "+" },
+              { icon: <Award size={20} />, value: stats.rank, label: "AIR PreCAT", suffix: "" },
+              { icon: <TrendingUp size={20} />, value: stats.efficiency, label: "Efficiency Boost", suffix: "%" },
             ].map((stat, idx) => (
-              <div key={idx} className={`${cardClass} backdrop-blur-sm rounded-2xl p-8 border transition-all hover:scale-105 text-center`}>
-                <div className="text-purple-400 flex justify-center mb-4">{stat.icon}</div>
-                <div className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+              <div key={idx} className={`stat-card rounded-2xl p-8 border text-center cursor-default ${dark ? 'bg-white/[0.04] border-pink-900/30' : 'bg-white/70 border-pink-200/60'}`}
+                style={{ backdropFilter: 'blur(20px)' }}>
+                <div className="text-pink-400 flex justify-center mb-4 opacity-70">{stat.icon}</div>
+                <div className="serif text-5xl font-light mb-2"
+                  style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   {stat.value}{stat.suffix}
                 </div>
-                <div className={`text-sm ${textClass}`}>{stat.label}</div>
+                <div className={`text-xs tracking-widest uppercase ${dark ? 'text-pink-200/40' : 'text-rose-700/50'}`}>{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="about" className="relative py-20 px-6">
+      {/* ABOUT */}
+      <section id="about" className="relative py-20 px-6 z-10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            About Me
-          </h2>
+          <div className="text-center mb-16">
+            <h2 className="serif section-heading text-5xl font-light" style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              About Me
+            </h2>
+          </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <div className={`${cardClass} backdrop-blur-sm rounded-2xl p-8 border`}>
-              <div className="flex items-center gap-3 mb-4">
-                <Briefcase className="text-purple-400" size={28} />
-                <h3 className="text-2xl font-bold">Career Objective</h3>
-              </div>
-              <p className={`${textClass} leading-relaxed`}>
-                Seeking to leverage my experience as a Java Developer at Bajaj to build scalable, 
-                high-performance applications and contribute to impactful business solutions. Passionate about backend 
-                development, problem-solving, and continuous learning, I aim to grow professionally while working with
-                modern technologies and collaborative teams in challenging environments.
-              </p>
-            </div>
-
-            <div className={`${cardClass} backdrop-blur-sm rounded-2xl p-8 border`}>
-              <div className="flex items-center gap-3 mb-4">
-                <GraduationCap className="text-pink-400" size={28} />
-                <h3 className="text-2xl font-bold">Education</h3>
-              </div>
-              <div className="space-y-4">
-                {education.map((edu, idx) => (
-                  <div key={idx} className="border-l-2 border-purple-500 pl-4">
-                    <h4 className="font-semibold">{edu.degree}</h4>
-                    <p className={`text-sm ${textClass}`}>{edu.institution}</p>
-                    <p className="text-sm text-purple-400">{edu.period} • {edu.score}</p>
+            {/* Career Objective */}
+            <div className={`blossom-card rounded-3xl p-8 border ${dark ? 'bg-white/[0.04] border-pink-900/20' : 'bg-white/70 border-pink-200/50'}`}
+              style={{ backdropFilter: 'blur(20px)' }}>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2.5 rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(249,168,212,0.2), rgba(232,121,249,0.15))' }}>
+                    <Briefcase size={18} className="text-pink-400" />
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="timeline" className="relative py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            My Journey
-          </h2>
-
-          <div className="relative">
-            <div className={`absolute left-1/2 transform -translate-x-1/2 h-full w-1 ${isDarkMode ? 'bg-purple-500/30' : 'bg-purple-300'}`}></div>
-            
-            {timeline.map((item, idx) => (
-              <div key={idx} className={`relative mb-12 ${idx % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                <div className={`md:w-1/2 ${idx % 2 === 0 ? 'md:ml-auto md:pr-12' : 'md:pl-12 md:ml-auto'}`}>
-                  <div className={`${cardClass} backdrop-blur-sm rounded-2xl p-6 border transition-all hover:scale-105 hover:border-purple-500/50`}>
-                    <div className="text-purple-400 text-sm mb-2">{item.year}</div>
-                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                    <p className={`text-sm ${textClass}`}>{item.description}</p>
-                    <div className="mt-3">
-                     <span
-                      className={`px-3 py-1 rounded-full text-xs ${
-                      item.type === 'career'
-                      ? 'bg-pink-500/20 text-pink-400'
-                      : item.type === 'achievement'
-                      ? 'bg-yellow-500/20 text-yellow-400'
-                      : item.type === 'education'
-                      ? 'bg-blue-500/20 text-blue-400'
-                      : item.type === 'project'
-                      ? 'bg-green-500/20 text-green-400'
-                      : 'bg-purple-500/20 text-purple-400'
-                      }`}
-                      >
-                        {item.type}
-                      </span>
-                    </div>
-                  </div>
+                  <h3 className="serif text-2xl font-light">Career Objective</h3>
                 </div>
-                <div className={`absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full ${
-                  item.type === 'career' ? 'bg-pink-400' :
-                  item.type === 'achievement' ? 'bg-yellow-400' :
-                  item.type === 'education' ? 'bg-blue-400' :
-                  item.type === 'project' ? 'bg-green-400' :
-                  item.type === 'career' ? 'bg-pink-400' :
-                  'bg-purple-400'
-                } border-4 ${isDarkMode ? 'border-slate-950' : 'border-gray-50'}`}
-                style={{ top: '24px' }}
-                ></div>
+                <p className={`leading-relaxed text-sm font-light ${dark ? 'text-pink-100/50' : 'text-rose-900/60'}`}>
+                  Seeking to leverage my experience as a Java Developer at Bajaj to build scalable,
+                  high-performance applications and contribute to impactful business solutions. Passionate about backend
+                  development, problem-solving, and continuous learning, I aim to grow professionally while working with
+                  modern technologies and collaborative teams in challenging environments.
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </div>
 
-      {/* SKILLS SECTION: updated with animated glowing bars */}
-      <section id="skills" ref={skillsRef} className={`relative py-20 px-6 ${skillsInView ? 'skills-in-view' : ''}`}>
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Skills & Expertise
-          </h2>
- 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {skills.map((category, idx) => (
-              <div
-                key={idx}
-                className={`${cardClass} backdrop-blur-sm rounded-2xl p-8 border hover:border-purple-500/50 transition-all hover:scale-105 skill-card`}
-              >
-                <div className="text-purple-400 mb-4">{category.icon}</div>
-                <h3 className="text-2xl font-bold mb-6">{category.name}</h3>
-                <div className="space-y-4">
-                  {category.items.map((item, i) => (
-                    <div
-                      key={i}
-                      className="skill-row"
-                      style={{ ['--w']: `${item.level}%` }} // sets CSS variable for bar width
-                      tabIndex={0} // keyboard-focusable
-                    >
-                      <div className="flex justify-between mb-2 items-center">
-                        <span className={`text-sm ${textClass}`}>{item.name}</span>
-                        {/* label area left empty (you asked no percentage shown) */}
-                        <span className="text-sm text-purple-400 opacity-80">{/* optional label*/}</span>
-                      </div>
-
-                      <div className={`w-full h-2 ${isDarkMode ? 'bg-slate-800' : 'bg-gray-200'} rounded-full overflow-hidden`}>
-                        <div
-                          className="skill-bar-inner h-full rounded-full"
-                          aria-hidden="true"
-                        />
-                      </div>
+            {/* Education */}
+            <div className={`blossom-card rounded-3xl p-8 border ${dark ? 'bg-white/[0.04] border-pink-900/20' : 'bg-white/70 border-pink-200/50'}`}
+              style={{ backdropFilter: 'blur(20px)' }}>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2.5 rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(249,168,212,0.2), rgba(232,121,249,0.15))' }}>
+                    <GraduationCap size={18} className="text-pink-400" />
+                  </div>
+                  <h3 className="serif text-2xl font-light">Education</h3>
+                </div>
+                <div className="space-y-5 relative z-10">
+                  {education.map((edu, idx) => (
+                    <div key={idx} className="edu-item">
+                      <h4 className={`font-medium text-sm ${dark ? 'text-pink-100' : 'text-rose-900'}`}>{edu.degree}</h4>
+                      <p className={`text-xs mt-0.5 ${dark ? 'text-pink-200/40' : 'text-rose-700/50'}`}>{edu.institution}</p>
+                      <p className="text-xs text-pink-400 mt-0.5">{edu.period}{edu.score && ` · ${edu.score}`}</p>
                     </div>
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TIMELINE */}
+      <section id="timeline" className="relative py-20 px-6 z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="serif section-heading text-5xl font-light" style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              My Journey
+            </h2>
+          </div>
+
+          <div className="relative">
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px"
+              style={{ background: 'linear-gradient(180deg, transparent, rgba(249,168,212,0.4) 10%, rgba(249,168,212,0.4) 90%, transparent)' }} />
+
+            {timeline.map((item, idx) => (
+              <div key={idx} className={`relative mb-12 flex ${idx % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
+                <div className={`w-full md:w-[46%] ${idx % 2 === 0 ? 'md:pr-10' : 'md:pl-10'}`}>
+                  <div className={`blossom-card rounded-2xl p-6 border cursor-default ${dark ? 'bg-white/[0.04] border-pink-900/20' : 'bg-white/70 border-pink-200/50'}`}
+                    style={{ backdropFilter: 'blur(20px)' }}>
+                    <div className="relative z-10">
+                      <div className="text-pink-400 text-xs tracking-widest uppercase mb-2">{item.year}</div>
+                      <h3 className={`serif text-xl font-light mb-2 ${dark ? 'text-pink-100' : 'text-rose-900'}`}>{item.title}</h3>
+                      <p className={`text-xs leading-relaxed ${dark ? 'text-pink-200/40' : 'text-rose-700/50'}`}>{item.description}</p>
+                      <div className="mt-4">
+                        <span className={`px-3 py-1 rounded-full text-xs tracking-wide ${
+                          item.type === 'career' ? 'bg-pink-500/15 text-pink-400 border border-pink-500/20'
+                            : item.type === 'achievement' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20'
+                              : item.type === 'education' ? 'bg-blue-500/15 text-blue-400 border border-blue-500/20'
+                                : item.type === 'project' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
+                                  : 'bg-purple-500/15 text-purple-400 border border-purple-500/20'
+                        }`}>
+                          {item.type}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Center dot */}
+                <div className="timeline-dot absolute left-1/2 transform -translate-x-1/2 w-3.5 h-3.5 rounded-full border-2"
+                  style={{
+                    top: '24px',
+                    background: item.type === 'achievement' ? '#fbbf24'
+                      : item.type === 'education' ? '#60a5fa'
+                        : item.type === 'project' ? '#34d399'
+                          : '#f9a8d4',
+                    borderColor: dark ? '#0f0a14' : '#fdf6f9',
+                  }} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SKILLS */}
+      <section id="skills" ref={skillsRef} className={`relative py-20 px-6 z-10 ${skillsInView ? 'skills-in-view' : ''}`}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="serif section-heading text-5xl font-light" style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Skills & Expertise
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {skills.map((category, idx) => (
+              <div key={idx} className={`blossom-card rounded-3xl p-7 border ${dark ? 'bg-white/[0.04] border-pink-900/20' : 'bg-white/70 border-pink-200/50'}`}
+                style={{ backdropFilter: 'blur(20px)' }}>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="text-pink-400 opacity-60">{category.icon}</div>
+                    <h3 className={`serif text-xl font-light ${dark ? 'text-pink-100' : 'text-rose-900'}`}>{category.name}</h3>
+                  </div>
+                  <div className="space-y-4">
+                    {category.items.map((item, i) => (
+                      <div key={i} className="skill-row" style={{ '--w': `${item.level}%` }} tabIndex={0}>
+                        <div className="flex justify-between mb-2">
+                          <span className={`text-xs tracking-wide ${dark ? 'text-pink-200/50' : 'text-rose-700/60'}`}>{item.name}</span>
+                          <span className="text-xs text-pink-400/50">{item.level}%</span>
+                        </div>
+                        <div className={`w-full h-1.5 rounded-full overflow-hidden ${dark ? 'bg-pink-950/60' : 'bg-pink-100'}`}>
+                          <div className="skill-bar-inner h-full rounded-full" aria-hidden="true" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
 
-          <div className={`mt-12 ${cardClass} backdrop-blur-sm rounded-2xl p-8 border`}>
-            <h3 className="text-2xl font-bold mb-4 text-center">Core Competencies</h3>
+          {/* Competencies */}
+          <div className={`mt-10 rounded-3xl p-8 border ${dark ? 'bg-white/[0.03] border-pink-900/20' : 'bg-white/60 border-pink-200/40'}`}
+            style={{ backdropFilter: 'blur(20px)' }}>
+            <h3 className={`serif text-xl font-light text-center mb-6 ${dark ? 'text-pink-100' : 'text-rose-900'}`}>Core Competencies</h3>
             <div className="flex flex-wrap gap-3 justify-center">
               {["Data Structures & Algorithms", "Object-Oriented Programming", "SDLC", "Agile/Scrum", "REST APIs", "Microservices", "Problem Solving"].map((skill, idx) => (
-                <span key={idx} className="px-4 py-2 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full text-sm border border-purple-500/30">
+                <span key={idx} className={`petal-tag px-4 py-2 rounded-full text-xs tracking-wide border cursor-default ${dark ? 'border-pink-500/20 text-pink-200/60 bg-pink-900/10' : 'border-pink-300/60 text-rose-700/70 bg-pink-50'}`}>
                   {skill}
                 </span>
               ))}
@@ -726,23 +852,24 @@ useEffect(() => {
         </div>
       </section>
 
-      <section id="projects" className="relative py-20 px-6">
+      {/* PROJECTS */}
+      <section id="projects" className="relative py-20 px-6 z-10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl font-bold text-center mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Featured Projects
-          </h2>
+          <div className="text-center mb-10">
+            <h2 className="serif section-heading text-5xl font-light" style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Featured Projects
+            </h2>
+          </div>
 
-          <div className="flex justify-center gap-4 mb-12 flex-wrap">
+          <div className="flex justify-center gap-3 mb-12 flex-wrap">
             {['All', 'Full-Stack', 'Backend', 'IoT'].map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setProjectFilter(filter)}
-                className={`px-6 py-2 rounded-full font-semibold transition-all ${
+              <button key={filter} onClick={() => setProjectFilter(filter)}
+                className={`bloom-btn px-6 py-2 rounded-full text-xs tracking-widest uppercase transition-all border ${
                   projectFilter === filter
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                    : `${cardClass} border hover:border-purple-500/50`
+                    ? 'text-white border-transparent'
+                    : dark ? 'border-pink-900/30 text-pink-300/60 hover:border-pink-400/40' : 'border-pink-200 text-rose-700/60 hover:border-pink-400'
                 }`}
-              >
+                style={projectFilter === filter ? { background: 'linear-gradient(135deg, #f9a8d4, #e879f9)' } : {}}>
                 {filter}
               </button>
             ))}
@@ -750,32 +877,25 @@ useEffect(() => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project, idx) => (
-              <div
-                key={idx}
-                className={`group relative ${cardClass} backdrop-blur-sm rounded-2xl p-6 border hover:border-purple-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20`}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity`} />
-                
+              <div key={idx} className={`project-reveal blossom-card rounded-3xl p-7 border ${dark ? 'bg-white/[0.04] border-pink-900/20' : 'bg-white/70 border-pink-200/50'}`}
+                style={{ backdropFilter: 'blur(20px)' }}>
+                <div className="reveal-overlay" />
                 <div className="relative z-10">
-                  <div className="text-xs text-purple-400 mb-2">{project.period}</div>
-                  <h3 className="text-2xl font-bold mb-3 group-hover:text-purple-400 transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className={`${textClass} mb-4 text-sm`}>{project.description || project.Description}</p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="text-pink-400/50 text-xs tracking-widest mb-3">{project.period}</div>
+                  <h3 className={`serif text-2xl font-light mb-3 ${dark ? 'text-pink-100' : 'text-rose-900'}`}>{project.title}</h3>
+                  <p className={`text-xs leading-relaxed mb-5 ${dark ? 'text-pink-200/40' : 'text-rose-700/50'}`}>{project.description}</p>
+
+                  <div className="flex flex-wrap gap-2 mb-6">
                     {project.tech.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 bg-purple-500/20 rounded-full text-xs border border-purple-500/30"
-                      >
+                      <span key={i} className={`petal-tag px-3 py-1 rounded-full text-xs border ${dark ? 'border-pink-500/20 text-pink-300/60 bg-pink-900/10' : 'border-pink-300/50 text-rose-700/60 bg-pink-50'}`}>
                         {tech}
                       </span>
                     ))}
                   </div>
 
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-purple-400 hover:text-pink-400 transition-colors">
-                    View Project <ExternalLink size={18} />
+                  <a href={project.link} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-xs text-pink-400 hover:text-pink-300 transition-colors tracking-wide">
+                    View Project <ExternalLink size={13} />
                   </a>
                 </div>
               </div>
@@ -784,107 +904,95 @@ useEffect(() => {
         </div>
       </section>
 
-      <section id="achievements" className="relative py-20 px-6">
+      {/* ACHIEVEMENTS */}
+      <section id="achievements" className="relative py-20 px-6 z-10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Awards & Achievements
-          </h2>
+          <div className="text-center mb-16">
+            <h2 className="serif section-heading text-5xl font-light" style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Awards & Achievements
+            </h2>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {achievements.map((achievement, idx) => (
-              <div
-                key={idx}
-                className={`${cardClass} backdrop-blur-sm rounded-2xl p-8 border hover:border-purple-500/50 transition-all hover:scale-105 text-center`}
-              >
-                <div className="flex justify-center mb-4">{achievement.icon}</div>
-                <div className="text-purple-400 text-sm mb-2">{achievement.year}</div>
-                <h3 className="text-xl font-bold mb-3">{achievement.title}</h3>
-                <p className={`${textClass} text-sm`}>{achievement.description}</p>
+              <div key={idx} className={`badge-card rounded-3xl p-8 border text-center cursor-default ${dark ? 'bg-white/[0.04] border-pink-900/20' : 'bg-white/70 border-pink-200/50'}`}
+                style={{ backdropFilter: 'blur(20px)' }}>
+                <div className="flex justify-center mb-4 opacity-80">{achievement.icon}</div>
+                <div className="text-pink-400/60 text-xs tracking-widest uppercase mb-3">{achievement.year}</div>
+                <h3 className={`serif text-xl font-light mb-3 ${dark ? 'text-pink-100' : 'text-rose-900'}`}>{achievement.title}</h3>
+                <p className={`text-xs leading-relaxed ${dark ? 'text-pink-200/40' : 'text-rose-700/50'}`}>{achievement.description}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-12 text-center">
-            <div className={`${cardClass} backdrop-blur-sm rounded-2xl p-8 border inline-block`}>
-              <h3 className="text-xl font-bold mb-4">Coding Profiles</h3>
-              <div className="flex gap-6 justify-center">
-                <a href="https://leetcode.com/Shubh_Vaish" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-pink-400 transition-colors">
-                  LeetCode
-                </a>
-                <span className={textClass}>|</span>
-                <a href="https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-pink-400 transition-colors">
-                  Striver A2Z DSA
-                </a>
+            <div className={`inline-block rounded-2xl p-8 border ${dark ? 'bg-white/[0.04] border-pink-900/20' : 'bg-white/70 border-pink-200/50'}`}
+              style={{ backdropFilter: 'blur(20px)' }}>
+              <h3 className={`serif text-xl font-light mb-5 ${dark ? 'text-pink-100' : 'text-rose-900'}`}>Coding Profiles</h3>
+              <div className="flex gap-8 justify-center">
+                {[
+                  { label: "LeetCode", href: "https://leetcode.com/Shubh_Vaish" },
+                  { label: "Striver A2Z DSA", href: "https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2" },
+                ].map((link, i) => (
+                  <a key={i} href={link.href} target="_blank" rel="noopener noreferrer"
+                    className="text-sm text-pink-400 hover:text-pink-300 transition-colors tracking-wide hover:underline underline-offset-4">
+                    {link.label}
+                  </a>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="contact" className="relative py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Let's Work Together
-          </h2>
-          <p className={`text-xl ${textClass} mb-12`}>
-            Have a project in mind? Let's create something amazing together!
-          </p>
+      {/* CONTACT */}
+      <section id="contact" className="relative py-20 px-6 z-10">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="mb-12">
+            <h2 className="serif section-heading text-5xl font-light mb-6" style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Let's Work Together
+            </h2>
+            <p className={`text-sm font-light tracking-wide ${dark ? 'text-pink-200/40' : 'text-rose-700/50'}`}>
+              Have a project in mind? Let's create something amazing together.
+            </p>
+          </div>
 
-          <div className={`${cardClass} backdrop-blur-sm rounded-2xl p-8 border`}>
-            <div className="space-y-6">
-              <input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className={`w-full px-6 py-4 ${isDarkMode ? 'bg-slate-800/50 text-white' : 'bg-gray-100 text-gray-900'} border ${isDarkMode ? 'border-white/10' : 'border-purple-200'} rounded-xl focus:border-purple-500 focus:outline-none transition-colors`}
-              />
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className={`w-full px-6 py-4 ${isDarkMode ? 'bg-slate-800/50 text-white' : 'bg-gray-100 text-gray-900'} border ${isDarkMode ? 'border-white/10' : 'border-purple-200'} rounded-xl focus:border-purple-500 focus:outline-none transition-colors`}
-              />
-              <textarea
-                name="message"
-                id="message"
-                placeholder="Your Message"
-                rows={5}
-                value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
-                className={`w-full px-6 py-4 ${isDarkMode ? 'bg-slate-800/50 text-white' : 'bg-gray-100 text-gray-900'} border ${isDarkMode ? 'border-white/10' : 'border-purple-200'} rounded-xl focus:border-purple-500 focus:outline-none transition-colors resize-none`}
-              />
-              <button
-                onClick={handleSubmit}
-                className="w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold hover:scale-105 transition-transform shadow-lg shadow-purple-500/50 text-white"
-              >
-                Send Message
+          <div className={`rounded-3xl p-10 border ${dark ? 'bg-white/[0.04] border-pink-900/20' : 'bg-white/70 border-pink-200/50'}`}
+            style={{ backdropFilter: 'blur(20px)' }}>
+            <div className="space-y-5">
+              {[
+                { type: 'text', name: 'name', placeholder: 'Your Name', value: formData.name, onChange: (e) => setFormData({ ...formData, name: e.target.value }) },
+                { type: 'email', name: 'email', placeholder: 'Your Email', value: formData.email, onChange: (e) => setFormData({ ...formData, email: e.target.value }) },
+              ].map((field, i) => (
+                <input key={i} type={field.type} placeholder={field.placeholder} value={field.value} onChange={field.onChange}
+                  className={`petal-input w-full px-6 py-4 rounded-2xl text-sm border focus:border-pink-400/60 ${dark ? 'bg-pink-950/20 border-pink-900/30 text-pink-100 placeholder-pink-200/20' : 'bg-pink-50/80 border-pink-200/60 text-rose-900 placeholder-rose-300'}`} />
+              ))}
+              <textarea placeholder="Your Message" rows={5} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                className={`petal-input w-full px-6 py-4 rounded-2xl text-sm border resize-none focus:border-pink-400/60 ${dark ? 'bg-pink-950/20 border-pink-900/30 text-pink-100 placeholder-pink-200/20' : 'bg-pink-50/80 border-pink-200/60 text-rose-900 placeholder-rose-300'}`} />
+              <button onClick={handleSubmit}
+                className="bloom-btn w-full py-4 rounded-2xl text-sm font-medium tracking-widest uppercase text-white"
+                style={{ background: 'linear-gradient(135deg, #f9a8d4, #e879f9, #c084fc)' }}>
+                Send Message ✿
               </button>
             </div>
           </div>
 
-          <div className={`mt-12 flex gap-8 justify-center ${textClass} flex-wrap`}>
-            <a href="mailto:shubhvaish2002@gmail.com" className="flex items-center gap-2 hover:text-purple-400 transition-colors">
-              <Mail size={20} />
-              shubhvaish2002@gmail.com
+          <div className={`mt-10 flex gap-8 justify-center flex-wrap text-xs tracking-wide ${dark ? 'text-pink-200/40' : 'text-rose-700/50'}`}>
+            <a href="mailto:soniyaswami9689@gmail.com" className="flex items-center gap-2 hover:text-pink-400 transition-colors">
+              <Mail size={14} className="text-pink-400" /> soniyaswami9689@gmail.com
             </a>
-            <span>|</span>
-            <span className="flex items-center gap-2">
-              📞 7599926158 
-            </span>
+            <span className="text-pink-400/30">·</span>
+            <span className="flex items-center gap-1">📞 9689309057</span>
           </div>
         </div>
       </section>
 
-      <footer className={`relative py-8 px-6 border-t ${isDarkMode ? 'border-white/10' : 'border-purple-200'}`}>
-        <div className={`max-w-6xl mx-auto text-center ${textClass}`}>
-          <p>© 2025 Shubh Vaish. Built with React & Tailwind CSS</p>
-          <p className="text-sm mt-2">Electronics & Communication Engineer | Full Stack Developer</p>
+      {/* FOOTER */}
+      <footer className={`relative py-10 px-6 border-t z-10 ${dark ? 'border-pink-900/20' : 'border-pink-200/40'}`}>
+        <div className={`max-w-6xl mx-auto text-center ${dark ? 'text-pink-200/30' : 'text-rose-700/40'}`}>
+          <div className="text-2xl mb-3 opacity-40">❀</div>
+          <p className="serif text-sm font-light tracking-wider">© 2026 Soniya Swami. Built with React & Tailwind CSS</p>
+          <p className="text-xs mt-1 tracking-widest uppercase">Computer Science Engineer · Full Stack Developer</p>
         </div>
       </footer>
     </div>
