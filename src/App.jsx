@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Github, Linkedin, Mail, ExternalLink, Code, Palette, Zap, Menu, X, Award, Briefcase, GraduationCap, Download, Sun, Moon, TrendingUp, Target } from 'lucide-react';
+import emailjs from "@emailjs/browser";
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -149,11 +150,38 @@ useEffect(() => {
     requestAnimationFrame(animate);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert('Message sent! Thank you for reaching out.');
-    setFormData({ name: '', email: '', message: '' });
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!formData.name || !formData.email || !formData.message) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  try {
+    await emailjs.send(
+      "service_e2vt4gj",
+      "template_kt2nfwk",
+      {
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+      },
+      "G22C_HniOBpTSn4kk"
+    );
+
+    alert("Message sent successfully!");
+
+    setFormData({
+      name: "",
+      email: "",
+      message: "",
+    });
+  } catch (error) {
+    console.error(error);
+    alert("Failed to send message.");
+  }
+};
 
   const allProjects = [
     {
@@ -164,6 +192,40 @@ useEffect(() => {
       link: "https://github.com/D1-zoneout",
       period: "July 2025 - Aug 2025",
       category: "Full-Stack"
+    },
+    {
+    title: "Online Grocery Store",
+    description:
+      "Developed a full-stack e-commerce grocery platform with secure authentication, product management, cart functionality, and order tracking. Implemented category-wise product search, QR payments, inventory updates, toast notifications, and admin dashboard.",
+    tech: [
+      "React",
+      "Spring Boot",
+      "MySQL",
+      "REST APIs",
+      "JavaScript",
+      "Tailwind CSS",
+    ],
+    gradient: "from-pink-500 to-rose-500",
+    link: "#",
+    period: "Feb 2025 - Aug 2025",
+    category: "Full-Stack",
+    },
+    {
+      title: "Personal Portfolio Website",
+      description:
+      "Designed and developed a responsive personal portfolio website to showcase my projects, technical skills, education, and achievements. Built with React and Tailwind CSS, featuring smooth animations, interactive UI components, dark theme, and a modern responsive layout for an enhanced user experience.",
+    tech: [
+      "React",
+      "JavaScript",
+      "Tailwind CSS",
+      "HTML5",
+      "CSS3",
+      "Vite"
+    ],
+    gradient: "from-violet-500 to-purple-500",
+    link: "https://github.com/Shadow2002-hub/portfolio",
+    period: "Jul 2026",
+    category: "Frontend"
     },
     {
       title: "Vehicle Theft Detection System",
@@ -631,7 +693,7 @@ useEffect(() => {
             
             {timeline.map((item, idx) => (
               <div key={idx} className={`relative mb-12 ${idx % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                <div className={`md:w-1/2 ${idx % 2 === 0 ? 'md:ml-auto md:pr-12' : 'md:pl-12 md:ml-auto'}`}>
+                <div className={`md:w-1/2 ${ idx % 2 === 0 ? "md:pr-12" : "md:ml-auto md:pl-12" }`}>
                   <div className={`${cardClass} backdrop-blur-sm rounded-2xl p-6 border transition-all hover:scale-105 hover:border-purple-500/50`}>
                     <div className="text-purple-400 text-sm mb-2">{item.year}</div>
                     <h3 className="text-xl font-bold mb-2">{item.title}</h3>
@@ -831,7 +893,7 @@ useEffect(() => {
           </p>
 
           <div className={`${cardClass} backdrop-blur-sm rounded-2xl p-8 border`}>
-            <div className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <input
                 type="text"
                 name="name"
@@ -860,12 +922,12 @@ useEffect(() => {
                 className={`w-full px-6 py-4 ${isDarkMode ? 'bg-slate-800/50 text-white' : 'bg-gray-100 text-gray-900'} border ${isDarkMode ? 'border-white/10' : 'border-purple-200'} rounded-xl focus:border-purple-500 focus:outline-none transition-colors resize-none`}
               />
               <button
-                onClick={handleSubmit}
+                type="submit"
                 className="w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold hover:scale-105 transition-transform shadow-lg shadow-purple-500/50 text-white"
-              >
+                >
                 Send Message
               </button>
-            </div>
+            </form>
           </div>
 
           <div className={`mt-12 flex gap-8 justify-center ${textClass} flex-wrap`}>
